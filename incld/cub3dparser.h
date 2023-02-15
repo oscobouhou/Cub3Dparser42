@@ -6,7 +6,7 @@
 /*   By: oboutarf <oboutarf@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/15 13:45:47 by oboutarf          #+#    #+#             */
-/*   Updated: 2023/02/15 15:50:31 by oboutarf         ###   ########.fr       */
+/*   Updated: 2023/02/15 16:30:12 by oboutarf         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 # include <stdlib.h>
 # include <stdio.h>
 # include <unistd.h>
-# include "mlx.h"
 
 // # STRUCT
 typedef struct	s_color

@@ -6,7 +6,7 @@
 /*   By: oboutarf <oboutarf@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/15 13:45:47 by oboutarf          #+#    #+#             */
-/*   Updated: 2023/02/15 16:30:12 by oboutarf         ###   ########.fr       */
+/*   Updated: 2023/02/16 03:45:10 by oboutarf         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,11 @@
 # include <stdlib.h>
 # include <stdio.h>
 # include <unistd.h>
+#include <sys/types.h>
+#include <errno.h>  
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <string.h>
 
 // # STRUCT
 typedef struct	s_color
@@ -28,6 +33,7 @@ typedef struct	s_color
 typedef	struct	s_parse
 {
 	int			check;
+	char		*charfile;
 }				t_parse;
 
 typedef struct	s_extract

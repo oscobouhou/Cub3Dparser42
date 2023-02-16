@@ -6,7 +6,7 @@
 /*   By: oboutarf <oboutarf@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/15 13:45:47 by oboutarf          #+#    #+#             */
-/*   Updated: 2023/02/16 03:45:10 by oboutarf         ###   ########.fr       */
+/*   Updated: 2023/02/16 07:06:47 by oboutarf         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,9 @@ typedef struct	s_color
 
 typedef	struct	s_parse
 {
-	int			check;
+	int			check_prm;
 	char		*charfile;
+	char		*game_infos[6];
 }				t_parse;
 
 typedef struct	s_extract
@@ -54,13 +55,6 @@ typedef struct	s_cub
 }				t_cub;
 
 // # ENUM
-typedef	enum	e_cardinal
-{
-	NO,
-	SO,
-	WE,
-	EA
-}				t_cardinal;
 
 typedef	enum	e_return
 {
@@ -68,10 +62,14 @@ typedef	enum	e_return
 	SUCCESS
 }				t_return;
 
-typedef	enum	e_rgb_params
+typedef enum	e_params
 {
+	NO,
+	SO,
+	WE,
+	EA,
 	F,
 	C
-}				t_rgb_params;
+}				t_params;
 
 #endif

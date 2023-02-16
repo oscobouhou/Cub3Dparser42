@@ -6,7 +6,7 @@
 /*   By: oboutarf <oboutarf@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 15:44:28 by pgros             #+#    #+#             */
-/*   Updated: 2023/02/16 06:12:13 by oboutarf         ###   ########.fr       */
+/*   Updated: 2023/02/16 07:38:04 by oboutarf         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ t_cub	*init_game(void)
 	init->extract->parser = malloc(sizeof(t_parse));
 	if (!init->extract->parser)
 		return (NULL);
+	init->extract->parser->check_prm = 0;
 	init->extract->parser->charfile = NULL;
 	return (init);
 }
@@ -166,6 +167,76 @@ int	extract_map_info(t_cub *cub, char *buf, int fd)
 	return (SUCCESS);
 }
 
+int	fill_rgb_params(t_cub *cub, int *i, int param)
+{
+	(void)i;
+	(void)cub;
+	(void)param;
+	return (SUCCESS);
+}
+
+int	fill_cardinal_params(t_cub *cub, int *i, int param)
+{
+	int	tmp;
+
+	tmp = *i;
+	(*i)++;
+	(*i)++;
+	while (cub->extract->parser->charfile[*i] && (cub->extract->parser->charfile[*i] == ' ' \
+		|| (cub->extract->parser->charfile[*i] >= 9 && cub->extract->parser->charfile[*i] <= 13)))
+			(*i)++;
+	while (cub->extract->parser->charfile[*i] != ' ' && (!(cub->extract->parser->charfile[*i] >= 9 \
+		&& cub->extract->parser->charfile[*i] <= 13)))
+		(*i)++;
+	cub->extract->parser->game_infos[param] = malloc(sizeof(char) * (*i - tmp + 1));
+	if (!cub->extract->parser->game_infos[param])
+		return (FAIL);
+	dprintf(2, "%d --- %d\n", *i, tmp);
+	while (tmp < *i)
+	{
+		cub->extract->parser->game_infos[param][tmp] = cub->extract->parser->charfile[tmp];
+		tmp++;
+	}
+	cub->extract->parser->game_infos[param][tmp] = '\0';
+	dprintf(2, "game_infos: %s\n", cub->extract->parser->game_infos[param]);
+	cub->extract->parser->check_prm++;
+	return (SUCCESS);
+}
+
+int	check_info(t_cub *cub, int *i)
+{
+	if (cub->extract->parser->charfile[*i] == 'N' && cub->extract->parser->charfile[*i + 1] && cub->extract->parser->charfile[*i + 1] == 'O')
+		fill_cardinal_params(cub, i, 0);
+	else if (cub->extract->parser->charfile[*i] == 'S' && cub->extract->parser->charfile[*i + 1] && cub->extract->parser->charfile[*i + 1] == 'O')
+		fill_cardinal_params(cub, i, 1);
+	else if (cub->extract->parser->charfile[*i] == 'W' && cub->extract->parser->charfile[*i + 1] && cub->extract->parser->charfile[*i + 1] == 'E')
+		fill_cardinal_params(cub, i, 2);
+	else if (cub->extract->parser->charfile[*i] == 'E' && cub->extract->parser->charfile[*i + 1] && cub->extract->parser->charfile[*i + 1] == 'A')
+		fill_cardinal_params(cub, i, 3);
+	// else if (cub->extract->parser->charfile[*i] == 'F' && cub->extract->parser->charfile[*i + 1] && cub->extract->parser->charfile[*i + 1] == ' ')
+	// 	fill_rgb_params(cub, i, 4);
+	// else if (cub->extract->parser->charfile[*i] == 'C' && cub->extract->parser->charfile[*i + 1] && cub->extract->parser->charfile[*i + 1] == ' ')
+	// 	fill_rgb_params(cub, i, 5);
+	return (SUCCESS);
+}
+
+int	map_params(t_cub *cub)
+{
+	int	i;
+
+	i = 0;
+	while (cub->extract->parser->charfile[i])
+	{
+		if (!check_info(cub, &i))
+			return (FAIL);
+		else
+			i++;
+		if (cub->extract->parser->check_prm == 4)
+			break ;
+	}
+	return (SUCCESS);
+}
+
 int	file_extractor(t_cub *cub, char **av)
 {
 	char	buf[1];
@@ -175,7 +246,8 @@ int	file_extractor(t_cub *cub, char **av)
 		return (FAIL);
 	if (!extract_map_info(cub, buf, fd))
 		return (FAIL);
-	
+	if (!map_params(cub))
+		return (FAIL);
 	return (SUCCESS);
 }
 

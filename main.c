@@ -6,7 +6,7 @@
 /*   By: oboutarf <oboutarf@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 15:44:28 by pgros             #+#    #+#             */
-/*   Updated: 2023/02/16 13:43:42 by oboutarf         ###   ########.fr       */
+/*   Updated: 2023/02/16 16:27:47 by oboutarf         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -214,11 +214,12 @@ int	fill_rgb_params(t_cub *cub, int *i, int param)
 
 	tmp = *i;
 	(*i)++;
+	if (cub->extract->parser->charfile[*i] && cub->extract->parser->charfile[*i] != ' ')
+		return (FAIL);
 	while (cub->extract->parser->charfile[*i] && (cub->extract->parser->charfile[*i] == ' ' \
 		|| (cub->extract->parser->charfile[*i] >= 9 && cub->extract->parser->charfile[*i] <= 13)))
 			(*i)++;
-	while (cub->extract->parser->charfile[*i] != ' ' && (!(cub->extract->parser->charfile[*i] >= 9 \
-		&& cub->extract->parser->charfile[*i] <= 13)))
+	while (!(cub->extract->parser->charfile[*i] >= 9 && cub->extract->parser->charfile[*i] <= 13))
 		(*i)++;
 	cub->extract->parser->game_infos[param] = malloc(sizeof(char) * (*i - tmp + 1));
 	if (!cub->extract->parser->game_infos[param])
@@ -243,6 +244,8 @@ int	fill_cardinal_params(t_cub *cub, int *i, int param)
 	tmp = *i;
 	(*i)++;
 	(*i)++;
+	if (cub->extract->parser->charfile[*i] && cub->extract->parser->charfile[*i] != ' ')
+		return (FAIL);
 	while (cub->extract->parser->charfile[*i] && (cub->extract->parser->charfile[*i] == ' ' \
 		|| (cub->extract->parser->charfile[*i] >= 9 && cub->extract->parser->charfile[*i] <= 13)))
 			(*i)++;
@@ -355,12 +358,14 @@ int	map_params(t_cub *cub)
 				dprintf(2, "%s", cub->extract->map[i]);
 				i++;
 			}
-			return (6);
+			return (SUCCESS);
 		}
 		else
 			i++;
 	}
-	return (SUCCESS);
+	ft_putstr_fd(2, "Error\n");
+	ft_putstr_fd(2, "cub3d: error in map params\n");
+	return (FAIL);
 }
 
 int	file_extractor(t_cub *cub, char **av)

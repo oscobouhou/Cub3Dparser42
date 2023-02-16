@@ -6,7 +6,7 @@
 /*   By: oboutarf <oboutarf@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 15:44:28 by pgros             #+#    #+#             */
-/*   Updated: 2023/02/16 12:48:58 by oboutarf         ###   ########.fr       */
+/*   Updated: 2023/02/16 13:43:42 by oboutarf         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -288,7 +288,7 @@ char	*new_line(t_cub *cub, int *i)
 	j = *i;
 	while (cub->extract->parser->charfile[j] && cub->extract->parser->charfile[j] != '\n')
 		j++;
-	new = malloc(sizeof(char) * (j + 1));
+	new = malloc(sizeof(char) * (j + 2));
 	if (!new)
 		return (NULL);
 	j = 0;
@@ -298,7 +298,8 @@ char	*new_line(t_cub *cub, int *i)
 		(*i)++;
 		j++;
 	}
-	new[j] = '\0';
+	new[j] = '\n';
+	new[j + 1] = '\0';
 	return (new);
 }
 
@@ -308,9 +309,6 @@ int	extract_map(t_cub *cub, int i)
 	int	j;
 
 	j = 0;
-	while (cub->extract->parser->charfile[i] && (cub->extract->parser->charfile[i] == ' ' \
-		|| (cub->extract->parser->charfile[i] >= 9 && cub->extract->parser->charfile[i] <= 13)))
-			i++;
 	tmp_i = i;
 	while (cub->extract->parser->charfile[i])
 	{
@@ -354,7 +352,7 @@ int	map_params(t_cub *cub)
 			dprintf(2, "\n\n ---------------- #$# -------------------\n\n");
 			while (cub->extract->map[i])
 			{
-				dprintf(2, "%s\n", cub->extract->map[i]);
+				dprintf(2, "%s", cub->extract->map[i]);
 				i++;
 			}
 			return (6);
